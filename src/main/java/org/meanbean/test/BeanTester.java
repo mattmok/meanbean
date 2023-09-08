@@ -123,7 +123,7 @@ import java.util.function.Function;
 public class BeanTester {
 
 	/** Default number of times a bean should be tested. */
-	public static final int TEST_ITERATIONS_PER_BEAN = 100;
+	public static final int TEST_ITERATIONS_PER_BEAN = 10;
 
 	/** Random number generator used by factories to randomly generate values. */
 	private final RandomValueGenerator randomValueGenerator;

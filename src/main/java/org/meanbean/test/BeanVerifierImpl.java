@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 
 import static org.meanbean.test.BeanTesterBuilder.newBeanTesterBuilderWithInheritedContext;
 
-class BeanVerifierImpl implements BeanVerifier, VerifierSettings, VerifierSettingsEditor {
+public class BeanVerifierImpl implements BeanVerifier, VerifierSettings, VerifierSettingsEditor {
 
 	private Class<?> beanClass;
 	private final BeanTesterBuilder builder;

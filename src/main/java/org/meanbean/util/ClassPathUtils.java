@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,16 +24,29 @@ import org.meanbean.test.BeanVerifier;
 import org.meanbean.util.ClassPath.ClassInfo;
 
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class ClassPathUtils {
 
-	public static Class<?>[] findClassesIn(String packageName) {
-		ClassPath classPath = ClassPath.from(BeanVerifier.class);
-		Set<ClassInfo> classInfoSet = classPath.getTopLevelClassesRecursive(packageName);
-		return classInfoSet.stream()
-				.map(ClassInfo::load)
-				.filter(clazz -> !clazz.isInterface() && !Modifier.isAbstract(clazz.getModifiers()))
-				.toArray(Class<?>[]::new);
-	}
+    public static Class<?>[] findClassesIn(String packageName) {
+        ClassPath classPath = ClassPath.from(BeanVerifier.class);
+        Set<ClassInfo> classInfoSet = classPath.getTopLevelClassesRecursive(packageName);
+        return classInfoSet.stream()
+                .map(ClassInfo::load)
+                .filter(clazz -> !clazz.isInterface() && !Modifier.isAbstract(clazz.getModifiers()))
+                .toArray(Class<?>[]::new);
+    }
+
+    public static Class<?>[] findClassesIn(String packageName, Class<?>... excludes) {
+        Set<String> excludeClasses = Arrays.stream(excludes).map(Class::getName).collect(Collectors.toSet());
+        ClassPath classPath = ClassPath.from(BeanVerifier.class);
+        Set<ClassInfo> classInfoSet = classPath.getTopLevelClassesRecursive(packageName);
+        return classInfoSet.stream()
+                .map(ClassInfo::load)
+                .filter(clazz -> !clazz.isInterface() && !Modifier.isAbstract(clazz.getModifiers())
+                        && !excludeClasses.contains(clazz.getName()))
+                .toArray(Class<?>[]::new);
+    }
 }
